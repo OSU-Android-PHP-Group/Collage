@@ -3,5 +3,7 @@
 
     <string name="hello">Hello World, CollageActivity!</string>
     <string name="app_name">Collage</string>
-
+    <string name="splash">Welcome to the Collage App</string>
+	<string name="upload">Upload a Photo</string>
+	<string name="select">Select Your Photo(s)</string>
 </resources>
