@@ -40,3 +40,6 @@ gen/
 
 # Local configuration file (sdk path, etc)
 local.properties
+
+#README buffer saves
+*.md~
