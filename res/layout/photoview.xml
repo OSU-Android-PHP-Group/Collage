@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-/*
-**
-** /res/layout/main.xml
-**
-** Author: Lorensius W. L. T <lorenz@londatiga.net
-**
-*/
--->
-
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/tvUploadTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Select Your Photo For Upload"
+        android:text="*To Be Determined*"
         android:textSize="17sp"
         android:textStyle="bold" />
 
     <Button
-        android:id="@+id/btn_crop"
+        android:id="@+id/bChoosePhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Select image" />
+        android:text="Choose another image(s)" />
 
     <ImageView
-        android:id="@+id/iv_photo"
+        android:id="@+id/ivPhoto"
         android:layout_width="fill_parent"
         android:layout_height="200dp"
         android:layout_gravity="center_horizontal"
