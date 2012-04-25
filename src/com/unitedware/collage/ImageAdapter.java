@@ -13,7 +13,7 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
 
 	private Context mContext;
-	//ArrayList<Bitmap> uploadGallery;
+	ArrayList<Bitmap> uploadGallery;
 	//int galleryItem;
 
 	public int getCount() {
@@ -44,7 +44,7 @@ public class ImageAdapter extends BaseAdapter {
 		} else {
 			imageView = (ImageView) convertView;
 		}
-		
+
 		// I need to get the images from when they choose and add them to an ArrayList<BitMap>
 		//imageView.setImageResource(galleryItem);
 		return null;
