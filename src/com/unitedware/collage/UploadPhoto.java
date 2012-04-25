@@ -14,12 +14,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class UploadPhoto extends Activity implements OnClickListener {
 
@@ -57,6 +59,33 @@ public class UploadPhoto extends Activity implements OnClickListener {
         selectAnother.setVisibility(View.GONE);
         title = (TextView) findViewById(R.id.tvUploadTitle);
         title.setVisibility(View.GONE);
+
+        /*
+         * Create the directory if needed for the gridView This is setup to also
+         * test to make sure if it was created, I needed something visual right
+         * now, this won't go in final development
+         */
+        File folder = new File(Environment.getExternalStorageDirectory()
+                + "/Collage");
+        boolean success = false;
+        if (!folder.exists()) {
+            success = folder.mkdir();
+        }
+        if (success == true) {
+            // Toast msg = Toast.makeText(UploadPhoto.this,
+            // "Folder was created",
+            // Toast.LENGTH_LONG);
+            // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+            // msg.getYOffset() / 2);
+            // msg.show();
+        } else {
+            // Toast msg = Toast.makeText(UploadPhoto.this,
+            // "Folder was either already\ncreated or it failed",
+            // Toast.LENGTH_LONG);
+            // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+            // msg.getYOffset() / 2);
+            // msg.show();
+        }
     }
 
     public void choosePhotoOption() {
@@ -75,10 +104,11 @@ public class UploadPhoto extends Activity implements OnClickListener {
                     // Takes the photo and stores it to a temporary directory
                     Intent intent = new Intent(
                             android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    mImageCaptureUri = Uri.fromFile(new File(Environment
-                            .getExternalStorageDirectory(), "tmp_upload_"
-                            + String.valueOf(System.currentTimeMillis())
-                            + ".jpg"));
+                    mImageCaptureUri = Uri.fromFile(new File(
+                            Environment.getExternalStorageDirectory(),
+                            "/Collage/tmp_upload_"
+                                    + String.valueOf(System.currentTimeMillis())
+                                    + ".jpg"));
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                             mImageCaptureUri);
 
@@ -141,9 +171,9 @@ public class UploadPhoto extends Activity implements OnClickListener {
                 // mImageView.setImageBitmap(userPhoto);
                 Bundle extras = data.getExtras();
 
-                if (extras != null) {
-                    Bitmap bitmap = extras.getParcelable("data");
-                }
+                // if (extras != null) {
+                // Bitmap bitmap = extras.getParcelable("data");
+                // }
                 // showView(isViewHidden);
                 break;
 
