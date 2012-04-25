@@ -12,41 +12,43 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
 
-	private Context mContext;
-	ArrayList<Bitmap> uploadGallery;
-	//int galleryItem;
+    private Context mContext;
+    ArrayList<Bitmap> uploadGallery;
 
-	public int getCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    // int galleryItem;
 
-	public Object getItem(int position) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public int getCount() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-	public long getItemId(int position) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+    public Object getItem(int position) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-	public View getView(int position, View convertView, ViewGroup parent) {
-		// TODO Auto-generated method stub
-		ImageView imageView;
+    public long getItemId(int position) {
+        // TODO Auto-generated method stub
+        return 0;
+    }
 
-		// Sets up the gallery
-		if (convertView == null) {
-			imageView = new ImageView(mContext);
-			imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-			imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			imageView.setPadding(8, 8, 8, 8);
-		} else {
-			imageView = (ImageView) convertView;
-		}
+    public View getView(int position, View convertView, ViewGroup parent) {
+        // TODO Auto-generated method stub
+        ImageView imageView;
 
-		// I need to get the images from when they choose and add them to an ArrayList<BitMap>
-		//imageView.setImageResource(galleryItem);
-		return null;
-	}
+        // Sets up the gallery
+        if (convertView == null) {
+            imageView = new ImageView(mContext);
+            imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setPadding(8, 8, 8, 8);
+        } else {
+            imageView = (ImageView) convertView;
+        }
+
+        // I need to get the images from when they choose and add them to an
+        // ArrayList<BitMap>
+        // imageView.setImageResource(galleryItem);
+        return null;
+    }
 }

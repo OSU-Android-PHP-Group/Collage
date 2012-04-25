@@ -28,7 +28,7 @@
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
-        android:numColumns="2" >
+        android:numColumns="1" >
     </GridView>
 
 </LinearLayout>
