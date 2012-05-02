@@ -14,6 +14,7 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
@@ -184,6 +185,17 @@ public class UploadPhoto extends Activity implements OnClickListener {
         }
     }
 
+    public String getRealPathFromUri(Uri contentUri) {
+
+        String[] proj = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+
+        return cursor.getString(column_index);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -220,37 +232,36 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
             case PICK_FROM_FILE:
 
-                /*
-                 * This doesn't work do to a directory issue, I the URI path is
-                 * not allowing me to get the correct path to grab the photos to
-                 * copy
-                 */
-
-                // This gets the path data from the data given from the Uri and
-                // then grabs the image and sets it to the Bitmap variable
                 Uri targetUri = data.getData();
-                String photoDir = targetUri.toString();
-                Log.i("PHOTODIRPATH", photoDir);
+                String photoDir = getRealPathFromUri(targetUri);
+                // Log.i("PHOTODIRPATH", photoDir);
+                // Log.i("PHOTODIRPATH",
+                // Environment.getExternalStorageDirectory()
+                // .toString());
                 String collageDir = (Environment.getExternalStorageDirectory() + "/Collage/");
-                Log.i("PHOTODIRPATH", photoDir.substring(9, photoDir.length()));
-                Log.i("PHOTODIRPATH", collageDir);
-                File galleryPhoto = new File(photoDir.substring(8,
-                        photoDir.length()));
-                String message;
-                if (galleryPhoto.isFile() == true) {
-                    message = "galleryPhoto is a file";
-
-                } else {
-                    message = "galleryPhoto is not a file";
-                }
-                Log.i("PHOTODIRPATH", message);
-
-                // try {
-                // CopyandMoveFile(galleryPhoto, collageDir);
-                // } catch (IOException e) {
-                // // TODO Auto-generated catch block
-                // e.printStackTrace();
+                String parsedPhotoPath = photoDir.substring(11,
+                        photoDir.length());
+                // Log.i("PHOTODIRPATH", parsedPhotoPath);
+                // Log.i("PHOTODIRPATH", collageDir);
+                File galleryPhoto = new File(
+                        Environment.getExternalStorageDirectory()
+                                + parsedPhotoPath);
+                // String message;
+                // if (galleryPhoto.isFile() == true) {
+                // message = "galleryPhoto is a file";
+                //
+                // } else {
+                // message = "galleryPhoto is not a file";
                 // }
+                // Log.i("PHOTODIRPATH", message);
+
+                try {
+                    CopyandMoveFile(galleryPhoto, collageDir);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
                 showView(isViewHidden);
 
                 break;
