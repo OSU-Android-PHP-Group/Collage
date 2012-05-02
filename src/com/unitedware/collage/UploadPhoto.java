@@ -2,6 +2,7 @@ package com.unitedware.collage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.OutputStream;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -25,7 +26,7 @@ import android.widget.Toast;
 
 public class UploadPhoto extends Activity implements OnClickListener {
 
-    private Uri mImageCaptureUri;
+    private Uri mImageCaptureUri, outputFileUri;
     boolean isViewHidden = false;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 2;
@@ -53,7 +54,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
     }
 
     public void initialize() {
-        // mImageView = (ImageView) findViewById(R.id.ivPhoto);
         selectAnother = (Button) findViewById(R.id.bChoosePhoto);
         selectAnother.setOnClickListener(this);
         selectAnother.setVisibility(View.GONE);
@@ -71,21 +71,21 @@ public class UploadPhoto extends Activity implements OnClickListener {
         if (!folder.exists()) {
             success = folder.mkdir();
         }
-        if (success == true) {
-            // Toast msg = Toast.makeText(UploadPhoto.this,
-            // "Folder was created",
-            // Toast.LENGTH_LONG);
-            // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-            // msg.getYOffset() / 2);
-            // msg.show();
-        } else {
-            // Toast msg = Toast.makeText(UploadPhoto.this,
-            // "Folder was either already\ncreated or it failed",
-            // Toast.LENGTH_LONG);
-            // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-            // msg.getYOffset() / 2);
-            // msg.show();
-        }
+        // if (success == true) {
+        // // Toast msg = Toast.makeText(UploadPhoto.this,
+        // // "Folder was created",
+        // // Toast.LENGTH_LONG);
+        // // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+        // // msg.getYOffset() / 2);
+        // // msg.show();
+        // } else {
+        // // Toast msg = Toast.makeText(UploadPhoto.this,
+        // // "Folder was either already\ncreated or it failed",
+        // // Toast.LENGTH_LONG);
+        // // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+        // // msg.getYOffset() / 2);
+        // // msg.show();
+        // }
     }
 
     public void choosePhotoOption() {
@@ -111,6 +111,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
                                     + ".jpg"));
                     intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
                             mImageCaptureUri);
+                    startActivityForResult(intent, PICK_FROM_CAMERA);
 
                     try {
                         intent.putExtra("return-date", true);
@@ -167,37 +168,35 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
             switch (requestCode) {
             case PICK_FROM_CAMERA:
+
+                mImageView.setImageURI(outputFileUri);
+
                 // userPhoto = (Bitmap) data.getExtras().get("data");
                 // mImageView.setImageBitmap(userPhoto);
-                Bundle extras = data.getExtras();
-
-                // if (extras != null) {
-                // Bitmap bitmap = extras.getParcelable("data");
-                // }
-                // showView(isViewHidden);
+                showView(isViewHidden);
                 break;
 
             case PICK_FROM_FILE:
 
                 // This gets the path data from the data given from the Uri and
                 // then grabs the image and sets it to the Bitmap variable
-                // Uri targetUri = data.getData();
-                //
-                // try {
-                // userPhoto = BitmapFactory.decodeStream(getContentResolver()
-                // .openInputStream(targetUri));
-                // mImageView.setImageBitmap(userPhoto);
-                //
-                // } catch (FileNotFoundException e) {
-                // e.printStackTrace();
-                // }
-                //
-                // showView(isViewHidden);
+                Uri targetUri = data.getData();
+
+                try {
+                    userPhoto = BitmapFactory.decodeStream(getContentResolver()
+                            .openInputStream(targetUri));
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                showView(isViewHidden);
+
                 break;
             }
         }
         if (resultCode == RESULT_CANCELED) {
-            showView(isViewHidden);
+            // showView(isViewHidden);
         }
 
     }
