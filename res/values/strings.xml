@@ -4,6 +4,19 @@
     <string name="hello">Hello World, CollageActivity!</string>
     <string name="app_name">Collage</string>
     <string name="splash">Welcome to the Collage App</string>
-	<string name="upload">Upload a Photo</string>
-	<string name="select">Select Your Photo(s)</string>
+    <string name="upload">Upload a Photo</string>
+    <string name="select">Select Your Photo(s)</string>
+
+    <string-array name="helpTopics">
+        <item>Upload Images</item>
+        <item>Something else</item>
+        <item>And another thing</item>
+        <item> Mostly harmless</item>
+    </string-array>
+
+    <string name="uploadHelp">file:///android_asset/help_files/help1.html</string>
+    <string name="help2">file:///android_asset/help_files/help2.html</string>
+    <string name="help3">file:///android_asset/help_files/help3.html</string>
+    <string name="help4">file:///android_asset/help_files/help4.html</string>
+
 </resources>
