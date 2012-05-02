@@ -170,8 +170,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
             case PICK_FROM_CAMERA:
 
                 mImageView.setImageURI(outputFileUri);
-
-                // userPhoto = (Bitmap) data.getExtras().get("data");
+                userPhoto = (Bitmap) data.getExtras().get("data");
                 // mImageView.setImageBitmap(userPhoto);
                 showView(isViewHidden);
                 break;
@@ -181,14 +180,10 @@ public class UploadPhoto extends Activity implements OnClickListener {
                 // This gets the path data from the data given from the Uri and
                 // then grabs the image and sets it to the Bitmap variable
                 Uri targetUri = data.getData();
+                String photoDir = targetUri.toString();
 
-                try {
-                    userPhoto = BitmapFactory.decodeStream(getContentResolver()
-                            .openInputStream(targetUri));
-
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
+                File tempPhoto = new File(photoDir, "tmp_copied_"
+                        + String.valueOf(System.currentTimeMillis()) + ".jpg");
 
                 showView(isViewHidden);
 
