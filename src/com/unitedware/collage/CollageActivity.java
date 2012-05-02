@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -14,7 +15,8 @@ public class CollageActivity extends Activity implements OnClickListener {
     /** Called when the activity is first created. */
 
     Button choosePictures, uploadPictures;
-    Intent aboutUs, photoSelection, startPhotoUpload;
+
+    Intent aboutUs, photoSelection, startPhotoUpload, help;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class CollageActivity extends Activity implements OnClickListener {
         aboutUs = new Intent("com.unitedware.collage.ABOUT");
         photoSelection = new Intent("com.unitedware.collage.CHOOSEPHOTO");
         startPhotoUpload = new Intent("com.unitedware.collage.UPLOADPHOTO");
+        help = new Intent(this, Help.class);
 
     }
 
@@ -74,6 +77,9 @@ public class CollageActivity extends Activity implements OnClickListener {
             break;
         case R.id.Exit:
             finish();
+            break;
+        case R.id.Help:
+            startActivity(help);
             break;
         }
         return true;
