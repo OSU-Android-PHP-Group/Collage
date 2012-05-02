@@ -14,9 +14,9 @@
         <item> Mostly harmless</item>
     </string-array>
 
-    <string name="uploadHelp">A holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\nA holw lot of text\nNew text\n</string>
-    <string name="help2">Help for something else</string>
-    <string name="help3">And another help</string>
-    <string name="help4">Don\'t Panic</string>
+    <string name="uploadHelp">file://android_asset/help_files/help1.html</string>
+    <string name="help2">file://android_asset/help_files/help2.html</string>
+    <string name="help3">file://android_asset/help_files/help3.html</string>
+    <string name="help4">file://android_asset/help_files/help4.html</string>
 
 </resources>
