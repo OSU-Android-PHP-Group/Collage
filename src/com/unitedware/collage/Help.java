@@ -17,7 +17,7 @@ public class Help extends Activity {
         // TODO Auto-generated method stub
         setContentView(R.layout.help);
         
-        WebView browser = (WebView) findViewById(R.id.webView);
+        final WebView browser = (WebView) findViewById(R.id.webView);
         browser.getSettings().setJavaScriptEnabled(true);
         
         Spinner topicSelector = (Spinner) findViewById(R.id.spinnerTopicSelect);
@@ -26,7 +26,20 @@ public class Help extends Activity {
                 .setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                     public void onItemSelected(AdapterView<?> parent,
                             View view, int pos, long id) {
-                        
+                        switch (pos) {
+                        case 0:
+                            browser.loadUrl(getString(R.string.uploadHelp));
+                            break;
+                        case 1:
+                            browser.loadUrl(getString(R.string.help2));
+                            break;
+                        case 2:
+                            browser.loadUrl(getString(R.string.help3));
+                            break;
+                        case 3:
+                            browser.loadUrl(getString(R.string.help4));
+                            break;
+                        }
                     }
 
                     public void onNothingSelected(AdapterView<?> parent) {
