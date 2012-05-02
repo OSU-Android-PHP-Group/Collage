@@ -1,8 +1,12 @@
 package com.unitedware.collage;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +19,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -150,6 +155,26 @@ public class UploadPhoto extends Activity implements OnClickListener {
         return isHidden;
     }
 
+    public void CopyandMoveFile(File sourceFile, String destination)
+            throws IOException {
+        FileChannel in = null;
+        FileChannel out = null;
+
+        try {
+            in = new FileInputStream(sourceFile).getChannel();
+            File outFile = new File(destination, sourceFile.getName());
+            out = new FileOutputStream(outFile).getChannel();
+            in.transferTo(0, in.size(), out);
+        } finally {
+            if (in != null) {
+                in.close();
+            }
+            if (out != null) {
+                out.close();
+            }
+        }
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -169,22 +194,46 @@ public class UploadPhoto extends Activity implements OnClickListener {
             switch (requestCode) {
             case PICK_FROM_CAMERA:
 
-                mImageView.setImageURI(outputFileUri);
-                userPhoto = (Bitmap) data.getExtras().get("data");
+                // mImageView.setImageURI(outputFileUri);
+                // userPhoto = (Bitmap) data.getExtras().get("data");
                 // mImageView.setImageBitmap(userPhoto);
+                
                 showView(isViewHidden);
                 break;
 
             case PICK_FROM_FILE:
 
+                /*
+                 * This doesn't work do to a directory issue, I the URI path is
+                 * not allowing me to get the correct path to grab the photos to
+                 * copy
+                 */
+
                 // This gets the path data from the data given from the Uri and
                 // then grabs the image and sets it to the Bitmap variable
                 Uri targetUri = data.getData();
                 String photoDir = targetUri.toString();
+                Log.i("PHOTODIRPATH", photoDir);
+                String collageDir = (Environment.getExternalStorageDirectory() + "/Collage/");
+                Log.i("PHOTODIRPATH", photoDir.substring(9, photoDir.length()));
+                Log.i("PHOTODIRPATH", collageDir);
+                File galleryPhoto = new File(photoDir.substring(8,
+                        photoDir.length()));
+                String message;
+                if (galleryPhoto.isFile() == true) {
+                    message = "galleryPhoto is a file";
 
-                File tempPhoto = new File(photoDir, "tmp_copied_"
-                        + String.valueOf(System.currentTimeMillis()) + ".jpg");
+                } else {
+                    message = "galleryPhoto is not a file";
+                }
+                Log.i("PHOTODIRPATH", message);
 
+                // try {
+                // CopyandMoveFile(galleryPhoto, collageDir);
+                // } catch (IOException e) {
+                // // TODO Auto-generated catch block
+                // e.printStackTrace();
+                // }
                 showView(isViewHidden);
 
                 break;
