@@ -1,5 +1,6 @@
 package com.unitedware.collage;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,6 +20,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -70,26 +72,27 @@ public class UploadPhoto extends Activity implements OnClickListener {
          * test to make sure if it was created, I needed something visual right
          * now, this won't go in final development
          */
-        File folder = new File(Environment.getExternalStorageDirectory()
-                + "/Collage");
+        File folder = new File(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath()
+                        + "/Collage");
         boolean success = false;
         if (!folder.exists()) {
             success = folder.mkdir();
         }
         // if (success == true) {
-        // // Toast msg = Toast.makeText(UploadPhoto.this,
-        // // "Folder was created",
-        // // Toast.LENGTH_LONG);
-        // // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-        // // msg.getYOffset() / 2);
-        // // msg.show();
+        // Toast msg = Toast.makeText(UploadPhoto.this,
+        // "Folder was created",
+        // Toast.LENGTH_LONG);
+        // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+        // msg.getYOffset() / 2);
+        // msg.show();
         // } else {
-        // // Toast msg = Toast.makeText(UploadPhoto.this,
-        // // "Folder was either already\ncreated or it failed",
-        // // Toast.LENGTH_LONG);
-        // // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-        // // msg.getYOffset() / 2);
-        // // msg.show();
+        // Toast msg = Toast.makeText(UploadPhoto.this,
+        // "Folder was either already\ncreated or it failed",
+        // Toast.LENGTH_LONG);
+        // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
+        // msg.getYOffset() / 2);
+        // msg.show();
         // }
     }
 
@@ -106,25 +109,31 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
                 // Get picture from camera
                 if (item == 0) {
-                    // Takes the photo and stores it to a temporary directory
+                    // // Takes the photo and stores it to a temporary directory
+                    // Intent intent = new Intent(
+                    // android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                    // mImageCaptureUri = Uri.fromFile(new File(
+                    // Environment.getExternalStorageDirectory(),
+                    // "/Collage/tmp_upload_"
+                    // + String.valueOf(System.currentTimeMillis())
+                    // + ".jpg"));
+                    // intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
+                    // mImageCaptureUri);
+                    // startActivityForResult(intent, PICK_FROM_CAMERA);
+                    //
+                    // try {
+                    // intent.putExtra("return-date", true);
+                    // startActivityForResult(intent, PICK_FROM_CAMERA);
+                    // } catch (ActivityNotFoundException e) {
+                    // e.printStackTrace();
+                    // }
+
                     Intent intent = new Intent(
                             android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    mImageCaptureUri = Uri.fromFile(new File(
-                            Environment.getExternalStorageDirectory(),
-                            "/Collage/tmp_upload_"
-                                    + String.valueOf(System.currentTimeMillis())
-                                    + ".jpg"));
-                    intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                            mImageCaptureUri);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                    .getPath());
                     startActivityForResult(intent, PICK_FROM_CAMERA);
-
-                    try {
-                        intent.putExtra("return-date", true);
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                    } catch (ActivityNotFoundException e) {
-                        e.printStackTrace();
-                    }
-
                 }
 
                 else { // pick from file
@@ -197,7 +206,15 @@ public class UploadPhoto extends Activity implements OnClickListener {
                 // mImageView.setImageURI(outputFileUri);
                 // userPhoto = (Bitmap) data.getExtras().get("data");
                 // mImageView.setImageBitmap(userPhoto);
-                
+
+                Bitmap bm = (Bitmap) data.getExtras().get("data");
+                MediaStore.Images.Media.insertImage(getContentResolver(), bm,
+                        null, null);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] b = baos.toByteArray();
+
                 showView(isViewHidden);
                 break;
 
