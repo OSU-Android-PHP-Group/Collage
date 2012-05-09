@@ -13,9 +13,6 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
 
     private Context mContext;
-    ArrayList<Bitmap> uploadGallery;
-
-    // int galleryItem;
 
     public int getCount() {
         // TODO Auto-generated method stub
@@ -46,9 +43,10 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        // I need to get the images from when they choose and add them to an
-        // ArrayList<BitMap>
-        // imageView.setImageResource(galleryItem);
+        // Use Java IO to grab all of the files from the photo directory and
+        // display them in GridView
+
+        List<File>list = new Array.asList
         return null;
     }
 }

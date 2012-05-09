@@ -110,25 +110,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
                 // Get picture from camera
                 if (item == 0) {
-                    // // Takes the photo and stores it to a temporary directory
-                    // Intent intent = new Intent(
-                    // android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                    // mImageCaptureUri = Uri.fromFile(new File(
-                    // Environment.getExternalStorageDirectory(),
-                    // "/Collage/tmp_upload_"
-                    // + String.valueOf(System.currentTimeMillis())
-                    // + ".jpg"));
-                    // intent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-                    // mImageCaptureUri);
-                    // startActivityForResult(intent, PICK_FROM_CAMERA);
-                    //
-                    // try {
-                    // intent.putExtra("return-date", true);
-                    // startActivityForResult(intent, PICK_FROM_CAMERA);
-                    // } catch (ActivityNotFoundException e) {
-                    // e.printStackTrace();
-                    // }
-
                     Intent intent = new Intent(
                             android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
                     intent.putExtra(MediaStore.EXTRA_OUTPUT,
