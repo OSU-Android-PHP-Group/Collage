@@ -3,38 +3,37 @@ package com.unitedware.collage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class UploadPhoto extends Activity implements OnClickListener {
 
     private Uri mImageCaptureUri, outputFileUri;
+    private Cursor cursor;
+    private int columnIndex;
     boolean isViewHidden = false;
     private static final int PICK_FROM_CAMERA = 1;
     private static final int PICK_FROM_FILE = 2;
@@ -59,6 +58,24 @@ public class UploadPhoto extends Activity implements OnClickListener {
             choosePhotoOption();
             startUp++;
         }
+
+        String[] projection = { MediaStore.Images.Thumbnails._ID };
+
+        cursor = managedQuery(
+                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+                null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+
+        columnIndex = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+
+        GridView photoGrid = (GridView) findViewById(R.id.gvPhotoGrid);
+        photoGrid.setAdapter(new ImageAdapter(this));
+
+        cursor = managedQuery(
+                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+                null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+        columnIndex = cursor
+                .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
     }
 
     public void initialize() {
@@ -80,21 +97,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
         if (!folder.exists()) {
             success = folder.mkdir();
         }
-        // if (success == true) {
-        // Toast msg = Toast.makeText(UploadPhoto.this,
-        // "Folder was created",
-        // Toast.LENGTH_LONG);
-        // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-        // msg.getYOffset() / 2);
-        // msg.show();
-        // } else {
-        // Toast msg = Toast.makeText(UploadPhoto.this,
-        // "Folder was either already\ncreated or it failed",
-        // Toast.LENGTH_LONG);
-        // msg.setGravity(Gravity.CENTER, msg.getXOffset() / 2,
-        // msg.getYOffset() / 2);
-        // msg.show();
-        // }
     }
 
     public void choosePhotoOption() {
@@ -215,27 +217,12 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
                 Uri targetUri = data.getData();
                 String photoDir = getRealPathFromUri(targetUri);
-                // Log.i("PHOTODIRPATH", photoDir);
-                // Log.i("PHOTODIRPATH",
-                // Environment.getExternalStorageDirectory()
-                // .toString());
                 String collageDir = (Environment.getExternalStorageDirectory() + "/Collage/");
                 String parsedPhotoPath = photoDir.substring(11,
                         photoDir.length());
-                // Log.i("PHOTODIRPATH", parsedPhotoPath);
-                // Log.i("PHOTODIRPATH", collageDir);
                 File galleryPhoto = new File(
                         Environment.getExternalStorageDirectory()
                                 + parsedPhotoPath);
-                // String message;
-                // if (galleryPhoto.isFile() == true) {
-                // message = "galleryPhoto is a file";
-                //
-                // } else {
-                // message = "galleryPhoto is not a file";
-                // }
-                // Log.i("PHOTODIRPATH", message);
-
                 try {
                     CopyandMoveFile(galleryPhoto, collageDir);
                 } catch (IOException e) {
@@ -249,7 +236,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
             }
         }
         if (resultCode == RESULT_CANCELED) {
-            // showView(isViewHidden);
+            showView(isViewHidden);
         }
 
     }
@@ -260,6 +247,48 @@ public class UploadPhoto extends Activity implements OnClickListener {
         case R.id.bChoosePhoto:
             choosePhotoOption();
             break;
+        }
+    }
+
+    private class ImageAdapter extends BaseAdapter {
+
+        private Context mContext;
+
+        public ImageAdapter(UploadPhoto uploadPhoto) {
+            // TODO Auto-generated constructor stub
+        }
+
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return cursor.getCount();
+        }
+
+        public Object getItem(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        public long getItemId(int position) {
+            // TODO Auto-generated method stub
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // TODO Auto-generated method stub
+            ImageView imageView;
+
+            // Sets up the gallery
+            if (convertView == null) {
+                imageView = new ImageView(mContext);
+                cursor.moveToPosition(position);
+                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(8, 8, 8, 8);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+
+            return null;
         }
     }
 }
