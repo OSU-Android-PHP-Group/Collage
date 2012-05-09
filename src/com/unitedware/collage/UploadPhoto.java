@@ -59,43 +59,44 @@ public class UploadPhoto extends Activity implements OnClickListener {
             startUp++;
         }
 
-        String[] projection = { MediaStore.Images.Thumbnails._ID };
+        // String[] projection = { MediaStore.Images.Thumbnails._ID };
+        //
+        // cursor = managedQuery(
+        // MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+        // null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+        //
+        // columnIndex = cursor
+        // .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
+        //
+        // GridView photoGrid = (GridView) findViewById(R.id.gvPhotoGrid);
+        // photoGrid.setAdapter(new ImageAdapter(this));
+        //
+        // cursor = managedQuery(
+        // MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
+        // null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
+        // columnIndex = cursor
+        // .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
 
-        cursor = managedQuery(
-                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-                null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
-
-        columnIndex = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-
-        GridView photoGrid = (GridView) findViewById(R.id.gvPhotoGrid);
-        photoGrid.setAdapter(new ImageAdapter(this));
-
-        cursor = managedQuery(
-                MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-                null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
-        columnIndex = cursor
-                .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
     }
 
     public void initialize() {
         selectAnother = (Button) findViewById(R.id.bChoosePhoto);
         selectAnother.setOnClickListener(this);
-        selectAnother.setVisibility(View.GONE);
+        // selectAnother.setVisibility(View.GONE);
         title = (TextView) findViewById(R.id.tvUploadTitle);
-        title.setVisibility(View.GONE);
+        // title.setVisibility(View.GONE);
 
         /*
          * Create the directory if needed for the gridView This is setup to also
          * test to make sure if it was created, I needed something visual right
          * now, this won't go in final development
          */
-        File folder = new File(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI.getPath()
-                        + "/Collage");
+
+        File collageDirectory = new File(
+                Environment.getExternalStorageDirectory() + "/Collage");
         boolean success = false;
-        if (!folder.exists()) {
-            success = folder.mkdir();
+        if (!collageDirectory.exists()) {
+            success = collageDirectory.mkdir();
         }
     }
 
@@ -198,10 +199,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
             switch (requestCode) {
             case PICK_FROM_CAMERA:
 
-                // mImageView.setImageURI(outputFileUri);
-                // userPhoto = (Bitmap) data.getExtras().get("data");
-                // mImageView.setImageBitmap(userPhoto);
-
                 Bitmap bm = (Bitmap) data.getExtras().get("data");
                 MediaStore.Images.Media.insertImage(getContentResolver(), bm,
                         null, null);
@@ -250,45 +247,46 @@ public class UploadPhoto extends Activity implements OnClickListener {
         }
     }
 
-    private class ImageAdapter extends BaseAdapter {
-
-        private Context mContext;
-
-        public ImageAdapter(UploadPhoto uploadPhoto) {
-            // TODO Auto-generated constructor stub
-        }
-
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return cursor.getCount();
-        }
-
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            ImageView imageView;
-
-            // Sets up the gallery
-            if (convertView == null) {
-                imageView = new ImageView(mContext);
-                cursor.moveToPosition(position);
-                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-
-            return null;
-        }
-    }
+    // @SuppressWarnings("unused")
+    // private class ImageAdapter extends BaseAdapter {
+    //
+    // private Context mContext;
+    //
+    // public ImageAdapter(UploadPhoto uploadPhoto) {
+    // // TODO Auto-generated constructor stub
+    // }
+    //
+    // public int getCount() {
+    // // TODO Auto-generated method stub
+    // return cursor.getCount();
+    // }
+    //
+    // public Object getItem(int position) {
+    // // TODO Auto-generated method stub
+    // return position;
+    // }
+    //
+    // public long getItemId(int position) {
+    // // TODO Auto-generated method stub
+    // return position;
+    // }
+    //
+    // public View getView(int position, View convertView, ViewGroup parent) {
+    // // TODO Auto-generated method stub
+    // ImageView imageView;
+    //
+    // // Sets up the gallery
+    // if (convertView == null) {
+    // imageView = new ImageView(mContext);
+    // cursor.moveToPosition(position);
+    // imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
+    // imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+    // imageView.setPadding(8, 8, 8, 8);
+    // } else {
+    // imageView = (ImageView) convertView;
+    // }
+    //
+    // return null;
+    // }
+    // }
 }
