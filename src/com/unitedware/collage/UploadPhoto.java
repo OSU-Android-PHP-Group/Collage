@@ -58,25 +58,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
             choosePhotoOption();
             startUp++;
         }
-
-        // String[] projection = { MediaStore.Images.Thumbnails._ID };
-        //
-        // cursor = managedQuery(
-        // MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-        // null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
-        //
-        // columnIndex = cursor
-        // .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-        //
-        // GridView photoGrid = (GridView) findViewById(R.id.sdcard);
-        // photoGrid.setAdapter(new ImageAdapter(this));
-        //
-        // cursor = managedQuery(
-        // MediaStore.Images.Thumbnails.EXTERNAL_CONTENT_URI, projection,
-        // null, null, MediaStore.Images.Thumbnails.IMAGE_ID);
-        // columnIndex = cursor
-        // .getColumnIndexOrThrow(MediaStore.Images.Thumbnails._ID);
-
     }
 
     public void initialize() {
@@ -199,6 +180,8 @@ public class UploadPhoto extends Activity implements OnClickListener {
             switch (requestCode) {
             case PICK_FROM_CAMERA:
 
+                // Get the photo and store it to the sd card along with making a
+                // thumbnail
                 Bitmap bm = (Bitmap) data.getExtras().get("data");
                 MediaStore.Images.Media.insertImage(getContentResolver(), bm,
                         null, null);
@@ -207,9 +190,38 @@ public class UploadPhoto extends Activity implements OnClickListener {
                 bm.compress(Bitmap.CompressFormat.JPEG, 100, baos);
                 byte[] b = baos.toByteArray();
 
+                /*
+                 * The user should be able to save the photo to their own
+                 * personal gallery and then it should also be located in the
+                 * collage directory
+                 */
+
+                // Grab the newest photo from the Camera directory aka what pic
+                // the user took
+                File[] images = new File(
+                        Environment.getExternalStorageDirectory()
+                                + File.separator + "DCIM/Camera").listFiles();
+                File latestSavedImage = images[0];
+                for (int i = 1; i < images.length; ++i) {
+                    if (images[i].lastModified() > latestSavedImage
+                            .lastModified()) {
+                        latestSavedImage = images[i];
+                    }
+                }
+
+                // Then move it over to the Collage Dir
+                String collageDirCamera = (Environment
+                        .getExternalStorageDirectory() + "/Collage/");
+                try {
+                    CopyandMoveFile(latestSavedImage, collageDirCamera);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
                 showView(isViewHidden);
                 break;
 
+            /* This has officially been proven to work */
             case PICK_FROM_FILE:
 
                 Uri targetUri = data.getData();
