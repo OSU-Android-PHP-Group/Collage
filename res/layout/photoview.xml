@@ -22,13 +22,15 @@
         android:text="Choose another image(s)" />
 
     <GridView
-        android:id="@+id/gvPhotoGrid"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/sdcard"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:columnWidth="90dp"
         android:gravity="center"
         android:horizontalSpacing="10dp"
-        android:numColumns="1" >
-    </GridView>
+        android:numColumns="auto_fit"
+        android:padding="10dp"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="10dp" />
 
 </LinearLayout>
