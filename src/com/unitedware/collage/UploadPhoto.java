@@ -49,6 +49,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photoview);
+        GridView gridview = (GridView) findViewById(R.id.sdcard);
 
         initialize();
 
@@ -57,6 +58,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
             isViewHidden = true;
             choosePhotoOption();
             startUp++;
+            gridview.setAdapter(new ImageAdapter(this));
         }
     }
 
