@@ -258,47 +258,4 @@ public class UploadPhoto extends Activity implements OnClickListener {
             break;
         }
     }
-
-    @SuppressWarnings("unused")
-    private class ImageAdapter extends BaseAdapter {
-
-        private Context mContext;
-
-        public ImageAdapter(UploadPhoto uploadPhoto) {
-            // TODO Auto-generated constructor stub
-        }
-
-        public int getCount() {
-            // TODO Auto-generated method stub
-            return cursor.getCount();
-        }
-
-        public Object getItem(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public long getItemId(int position) {
-            // TODO Auto-generated method stub
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // TODO Auto-generated method stub
-            ImageView imageView;
-
-            // Sets up the gallery
-            if (convertView == null) {
-                imageView = new ImageView(mContext);
-                cursor.moveToPosition(position);
-                imageView.setLayoutParams(new GridView.LayoutParams(85, 85));
-                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                imageView.setPadding(8, 8, 8, 8);
-            } else {
-                imageView = (ImageView) convertView;
-            }
-
-            return null;
-        }
-    }
 }
