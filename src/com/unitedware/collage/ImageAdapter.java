@@ -17,8 +17,7 @@ public class ImageAdapter extends BaseAdapter {
 
     // Grabs a file directory and creates the array needed for the gridView
     @SuppressWarnings("null")
-    public Integer[] getImagesFromDirTo(String dir) {
-        Integer[] finalGridList = null;
+    public Bitmap[] getImagesFromDirToBitmap(String dir) {
         Bitmap[] gridImages = null;
         File filePath = new File(dir);
         String[] filesInPath = filePath.list();
@@ -30,7 +29,7 @@ public class ImageAdapter extends BaseAdapter {
             gridImages[i] = newImage;
         }
 
-        return finalGridList;
+        return gridImages;
     }
 
     public ImageAdapter(Context c) {
@@ -62,6 +61,7 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
+        // Need to change this line so it gets bitmaps instead of integers
         imageView.setImageResource(mThumbIds[position]);
         return imageView;
     }
@@ -71,4 +71,5 @@ public class ImageAdapter extends BaseAdapter {
 
     // A place holder for right now
     private Integer[] mThumbIds = { R.drawable.ic_launcher };
+    // private Bitmap[] mThumbIds = getImagesFromDirToDrawable(dir);
 }
