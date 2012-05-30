@@ -23,9 +23,9 @@ public class ImageAdapter extends BaseAdapter {
         File filePath = new File(dir);
         String[] filesInPath = filePath.list();
 
+        // Gets all the files in the directory converted to a bitmap
         for (int i = 0; i < filesInPath.length; i++) {
-            String fileToConvert = Environment.getExternalStorageDirectory()
-                    + File.separator + dir;
+            String fileToConvert = dir + filesInPath[i];
             Bitmap newImage = BitmapFactory.decodeFile(fileToConvert);
             gridImages[i] = newImage;
         }
