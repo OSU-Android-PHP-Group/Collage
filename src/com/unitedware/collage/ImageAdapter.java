@@ -1,10 +1,7 @@
 package com.unitedware.collage;
 
-import java.io.File;
-
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,39 +10,26 @@ import android.widget.GridView;
 import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
+
+    // Member Variables
     private Context mContext;
+    private Bitmap[] finalGridImages;
 
-    // Grabs a file directory and creates the array needed for the gridView
-    @SuppressWarnings("null")
-    public Bitmap[] getImagesFromDirToBitmap(String dir) {
-        Bitmap[] gridImages = null;
-        File filePath = new File(dir);
-        String[] filesInPath = filePath.list();
-
-        // Gets all the files in the directory converted to a bitmap
-        for (int i = 0; i < filesInPath.length; i++) {
-            String fileToConvert = dir + filesInPath[i];
-            Bitmap newImage = BitmapFactory.decodeFile(fileToConvert);
-            gridImages[i] = newImage;
-        }
-
-        return gridImages;
-    }
-
-    public ImageAdapter(Context c) {
+    public ImageAdapter(Context c, Bitmap[] gridImages) {
         mContext = c;
+        finalGridImages = gridImages;
     }
 
     public int getCount() {
-        return mThumbIds.length;
+        return finalGridImages.length;
     }
 
     public Object getItem(int position) {
-        return null;
+        return position;
     }
 
     public long getItemId(int position) {
-        return 0;
+        return position;
     }
 
     // create a new ImageView for each item referenced by the Adapter
@@ -61,15 +45,17 @@ public class ImageAdapter extends BaseAdapter {
             imageView = (ImageView) convertView;
         }
 
-        // Need to change this line so it gets bitmaps instead of integers
-        imageView.setImageResource(mThumbIds[position]);
+        // Sets imageView from Bitmap array if there are actually photos there
+        if (finalGridImages[0] == null) {
+            imageView.setImageResource(mThumbIdsPlaceHolder[position]);
+        } else {
+            imageView.setImageBitmap(finalGridImages[position]);
+        }
         return imageView;
     }
 
-    String dir = Environment.getExternalStorageDirectory() + File.separator
-            + "Collage/";
+    String dir = Environment.getExternalStorageDirectory() + "/Collage/";
 
     // A place holder for right now
-    private Integer[] mThumbIds = { R.drawable.ic_launcher };
-    // private Bitmap[] mThumbIds = getImagesFromDirToDrawable(dir);
+    private Integer[] mThumbIdsPlaceHolder = { R.drawable.ic_launcher };
 }
