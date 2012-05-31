@@ -70,7 +70,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
         // Sets the gallery view whether the user has photos or not
         // if (galleryImages[0] == null) {
-        galleryView.setAdapter(new GalleryAdapter(this, null));
+        //galleryView.setAdapter(new GalleryAdapter(this, null));
         // } else {
         // Log.v(TAG, "gallerImages is not empty!");
         // galleryView.setAdapter(new GalleryAdapter(this, galleryImages));
