@@ -42,6 +42,7 @@ public class UploadPhoto extends Activity implements OnClickListener {
     Button selectAnother;
     Bundle extras;
     Bitmap userPhoto;
+    Bitmap[] gridImages;
     ImageView mImageView;
     TextView title;
 
@@ -58,7 +59,8 @@ public class UploadPhoto extends Activity implements OnClickListener {
             isViewHidden = true;
             choosePhotoOption();
             startUp++;
-            gridview.setAdapter(new ImageAdapter(this));
+            // Setup the Bitmap Array for the Image Adapter
+            gridview.setAdapter(new ImageAdapter(this, gridImages));
         }
     }
 
