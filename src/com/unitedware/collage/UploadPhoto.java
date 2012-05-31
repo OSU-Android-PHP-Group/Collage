@@ -14,17 +14,20 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.Gallery;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,15 +45,16 @@ public class UploadPhoto extends Activity implements OnClickListener {
     Button selectAnother;
     Bundle extras;
     Bitmap userPhoto;
-    Bitmap[] gridImages;
+    Bitmap[] galleryImages;
     ImageView mImageView;
     TextView title;
+    String TAG = "UPLOADPHOTOACTIVITY";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.photoview);
-        GridView gridview = (GridView) findViewById(R.id.sdcard);
+        Gallery galleryView = (Gallery) findViewById(R.id.sdcard);
 
         initialize();
 
@@ -59,30 +63,42 @@ public class UploadPhoto extends Activity implements OnClickListener {
             isViewHidden = true;
             choosePhotoOption();
             startUp++;
-            // Setup the Bitmap Array for the Image Adapter
-            gridview.setAdapter(new ImageAdapter(this, gridImages));
         }
+
+        String collageDir = (Environment.getExternalStorageDirectory() + "/Collage/");
+        // galleryImages = getGalleryImages(collageDir);
+
+        // Sets the gallery view whether the user has photos or not
+        // if (galleryImages[0] == null) {
+        galleryView.setAdapter(new GalleryAdapter(this, null));
+        // } else {
+        // Log.v(TAG, "gallerImages is not empty!");
+        // galleryView.setAdapter(new GalleryAdapter(this, galleryImages));
+        // }
     }
 
-    public void initialize() {
-        selectAnother = (Button) findViewById(R.id.bChoosePhoto);
-        selectAnother.setOnClickListener(this);
-        // selectAnother.setVisibility(View.GONE);
-        title = (TextView) findViewById(R.id.tvUploadTitle);
-        // title.setVisibility(View.GONE);
+    @SuppressWarnings("null")
+    public Bitmap[] getGalleryImages(String picDir) {
+        // TODO Auto-generated method stub
+        Bitmap[] imgArrBitmaps = null;
 
-        /*
-         * Create the directory if needed for the gridView This is setup to also
-         * test to make sure if it was created, I needed something visual right
-         * now, this won't go in final development
-         */
-
-        File collageDirectory = new File(
-                Environment.getExternalStorageDirectory() + "/Collage");
-        boolean success = false;
-        if (!collageDirectory.exists()) {
-            success = collageDirectory.mkdir();
+        File filePath = new File(picDir);
+        Log.v(TAG, "The path is: " + picDir);
+        String[] filesInPath = filePath.list();
+        Log.v(TAG, "There are: " + filesInPath.length + " files in the path.");
+        Log.v(TAG, "The first file is: " + filesInPath[0]);
+        for (int i = 0; i < filesInPath.length; i++) {
+            Log.v(TAG, "Made it in the for loop");
+            String fileToConvert = picDir + filesInPath[i];
+            Log.v(TAG, "The first path file to be converted is: "
+                    + fileToConvert);
+            Bitmap newImage = BitmapFactory.decodeFile(fileToConvert);
+            Log.v(TAG, newImage.toString());
+            Log.v(TAG, imgArrBitmaps[i].toString());
+            Log.v(TAG, "The Bitmap is: " + imgArrBitmaps[i]);
         }
+        Log.v(TAG, "There are: " + imgArrBitmaps.length + "in the Bitmap Array");
+        return imgArrBitmaps;
     }
 
     public void choosePhotoOption() {
@@ -123,17 +139,6 @@ public class UploadPhoto extends Activity implements OnClickListener {
 
     }
 
-    public boolean showView(boolean isHidden) {
-
-        // Reveals layout if necessary
-        if (isHidden == true) {
-            selectAnother.setVisibility(View.VISIBLE);
-            title.setVisibility(View.VISIBLE);
-            return isHidden = false;
-        }
-        return isHidden;
-    }
-
     public void CopyandMoveFile(File sourceFile, String destination)
             throws IOException {
         FileChannel in = null;
@@ -165,16 +170,27 @@ public class UploadPhoto extends Activity implements OnClickListener {
         return cursor.getString(column_index);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see android.app.Activity#onActivityResult(int, int,
-     * android.content.Intent) This onActivity result needs to changed from just
-     * setting one picture, to multiple pictures, in order to do this you need
-     * to save these to a file directory, I have already set up the permissions.
-     * This will allow me to use the ImageAdapter class grab all the photos from
-     * the directory and display them into the gridview
-     */
+    public void initialize() {
+        selectAnother = (Button) findViewById(R.id.bChoosePhoto);
+        selectAnother.setOnClickListener(this);
+        // selectAnother.setVisibility(View.GONE);
+        title = (TextView) findViewById(R.id.tvUploadTitle);
+        // title.setVisibility(View.GONE);
+
+        /*
+         * Create the directory if needed for the gridView This is setup to also
+         * test to make sure if it was created, I needed something visual right
+         * now, this won't go in final development
+         */
+
+        File collageDirectory = new File(
+                Environment.getExternalStorageDirectory() + "/Collage");
+        boolean success = false;
+        if (!collageDirectory.exists()) {
+            success = collageDirectory.mkdir();
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -261,5 +277,16 @@ public class UploadPhoto extends Activity implements OnClickListener {
             choosePhotoOption();
             break;
         }
+    }
+
+    public boolean showView(boolean isHidden) {
+
+        // Reveals layout if necessary
+        if (isHidden == true) {
+            selectAnother.setVisibility(View.VISIBLE);
+            title.setVisibility(View.VISIBLE);
+            return isHidden = false;
+        }
+        return isHidden;
     }
 }

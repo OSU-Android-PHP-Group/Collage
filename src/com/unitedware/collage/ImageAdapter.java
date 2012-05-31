@@ -2,7 +2,6 @@ package com.unitedware.collage;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -13,15 +12,15 @@ public class ImageAdapter extends BaseAdapter {
 
     // Member Variables
     private Context mContext;
-    private Bitmap[] finalGridImages;
+    private Bitmap[] finalGalleryImages;
 
-    public ImageAdapter(Context c, Bitmap[] gridImages) {
+    public ImageAdapter(Context c, Bitmap[] images) {
         mContext = c;
-        finalGridImages = gridImages;
+        finalGalleryImages = images;
     }
 
     public int getCount() {
-        return finalGridImages.length;
+        return finalGalleryImages.length;
     }
 
     public Object getItem(int position) {
@@ -46,15 +45,13 @@ public class ImageAdapter extends BaseAdapter {
         }
 
         // Sets imageView from Bitmap array if there are actually photos there
-        if (finalGridImages[0] == null) {
+        if (finalGalleryImages[0] == null) {
             imageView.setImageResource(mThumbIdsPlaceHolder[position]);
         } else {
-            imageView.setImageBitmap(finalGridImages[position]);
+            imageView.setImageBitmap(finalGalleryImages[position]);
         }
         return imageView;
     }
-
-    String dir = Environment.getExternalStorageDirectory() + "/Collage/";
 
     // A place holder for right now
     private Integer[] mThumbIdsPlaceHolder = { R.drawable.ic_launcher };
