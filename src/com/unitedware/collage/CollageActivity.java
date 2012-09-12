@@ -1,8 +1,11 @@
 package com.unitedware.collage;
 
+import java.io.File;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.widget.Button;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,6 +43,23 @@ public class CollageActivity extends Activity implements OnClickListener {
 		aboutUs = new Intent("com.unitedware.collage.ABOUT");
 		photoSelection = new Intent("com.unitedware.collage.CHOOSEPHOTO");
 		startPhotoUpload = new Intent("com.unitedware.collage.UPLOADPHOTO");
+		
+		// Make sure all the directories are in order
+		collagePhotoDir();
+
+	}
+
+	public void collagePhotoDir() {
+
+		File sdcard = Environment.getExternalStorageDirectory();
+		File collageDir = new File( sdcard.getAbsolutePath() + "/Collage");
+		File thumbnailsDir = new File(sdcard.getAbsolutePath() + "/Collage/thumbnails");
+		
+		if (!collageDir.isDirectory()) {
+			// Make the two folders on the sd card since they don't exist
+			collageDir.mkdirs();
+			thumbnailsDir.mkdirs();
+		}
 
 	}
 
