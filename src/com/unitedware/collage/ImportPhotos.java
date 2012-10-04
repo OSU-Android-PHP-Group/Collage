@@ -67,8 +67,14 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
 		// you can create a new file name "test.jpg" in sdcard folder.
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-		File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Collage" + File.separator + timeStamp + ".jpg");
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date());
+		File f = new File(Environment.getExternalStorageDirectory()
+				.getAbsolutePath()
+				+ "/Collage"
+				+ File.separator
+				+ timeStamp
+				+ ".jpg");
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -136,7 +142,7 @@ public class ImportPhotos extends Activity implements OnClickListener {
 			case PICK_FROM_CAMERA:
 				userPhoto = (Bitmap) data.getExtras().get("data");
 				mImageView.setImageBitmap(userPhoto);
-				
+
 				// Try and save the picture to the sd card
 				try {
 					savePhotoToSD(userPhoto);
@@ -162,6 +168,13 @@ public class ImportPhotos extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}
 
+				try {
+					savePhotoToSD(userPhoto);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
 				showView(isViewHidden);
 				break;
 			}
