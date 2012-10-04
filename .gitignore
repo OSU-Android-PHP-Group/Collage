@@ -43,3 +43,6 @@ local.properties
 
 #README buffer saves
 *.md~
+
+# For OSX
+.DS_Store
