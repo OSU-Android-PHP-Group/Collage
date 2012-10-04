@@ -42,7 +42,7 @@ public class CollageActivity extends Activity implements OnClickListener {
 
 		aboutUs = new Intent("com.unitedware.collage.ABOUT");
 		photoSelection = new Intent("com.unitedware.collage.CHOOSEPHOTO");
-		startPhotoUpload = new Intent("com.unitedware.collage.UPLOADPHOTO");
+		startPhotoUpload = new Intent("com.unitedware.collage.IMPORTPHOTOS");
 		
 		// Make sure all the directories are in order
 		collagePhotoDir();
