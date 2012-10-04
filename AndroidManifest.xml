@@ -51,11 +51,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".UploadPhoto"
+            android:name=".ImportPhotos"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
-                <action android:name="com.unitedware.collage.UPLOADPHOTO" />
+                <action android:name="com.unitedware.collage.IMPORTPHOTOS" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
