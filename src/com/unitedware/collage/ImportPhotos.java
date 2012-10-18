@@ -54,7 +54,7 @@ public class ImportPhotos extends Activity implements OnClickListener {
 	}
 
 	public void initialize() {
-		mImageView = (ImageView) findViewById(R.id.ivPhoto);
+		mImageView = (ImageView) findViewById(R.id.iv_photo);
 		selectAnother = (Button) findViewById(R.id.bChoosePhoto);
 		selectAnother.setOnClickListener(this);
 		selectAnother.setVisibility(View.GONE);
