@@ -6,4 +6,7 @@
     <string name="splash">Welcome to the Collage App</string>
 	<string name="import_photo">Import a Photo</string>
 	<string name="select">Select Your Photo(s)</string>
+	<string name="please_select_photo_s_to_upload">Please Select Photo(s) to Upload</string>
+	<string name="choose_another_image_s_">Choose another image(s)</string>
+	<string name="preview_of_image_after_user_selects_it">Preview of Image after user selects it</string>
 </resources>
