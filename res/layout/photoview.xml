@@ -11,7 +11,7 @@
         android:layout_marginBottom="10dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Please Select Photo(s) to Upload"
+        android:text="@string/please_select_photo_s_to_upload"
         android:textSize="17sp"
         android:textStyle="bold" />
 
@@ -19,26 +19,13 @@
         android:id="@+id/bChoosePhoto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Choose another image(s)" />
+        android:text="@string/choose_another_image_s_" />
 
-    <ScrollView
-        android:id="@+id/scrollView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-
-        <LinearLayout
-            android:id="@+id/scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <ImageView
-                android:id="@+id/ivPhoto"
-                android:layout_width="fill_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp" />
-
-        </LinearLayout>
-    </ScrollView>
+    <ImageView
+        android:id="@+id/ivPhoto"
+        android:layout_width="fill_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="10dp"
+        android:contentDescription="@string/preview_of_image_after_user_selects_it" />
 
 </LinearLayout>
