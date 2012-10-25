@@ -41,23 +41,26 @@ public class CollageActivity extends Activity implements OnClickListener {
 		uploadPictures.setOnClickListener(this);
 
 		aboutUs = new Intent("com.unitedware.collage.ABOUT");
-		photoSelection = new Intent("com.unitedware.collage.CHOOSEPHOTO");
+		photoSelection = new Intent(
+				"com.unitedware.collage.SELECTCOLLAGEPHOTOS");
 		startPhotoUpload = new Intent("com.unitedware.collage.IMPORTPHOTOS");
-		
+
 		// Make sure all the directories are in order
 		collagePhotoDir();
 
 	}
 
 	public void collagePhotoDir() {
-
 		File sdcard = Environment.getExternalStorageDirectory();
-		File collageDir = new File( sdcard.getAbsolutePath() + "/Collage");
-		File thumbnailsDir = new File(sdcard.getAbsolutePath() + "/Collage/thumbnails");
-		
+		File collageDir = new File(sdcard.getAbsolutePath() + "/Collage");
+		File thumbnailsDir = new File(sdcard.getAbsolutePath()
+				+ "/Collage/thumbnails");
+
 		if (!collageDir.isDirectory()) {
 			// Make the two folders on the sd card since they don't exist
 			collageDir.mkdirs();
+			thumbnailsDir.mkdirs();
+		} else if (collageDir.isDirectory() && !thumbnailsDir.isDirectory()) {
 			thumbnailsDir.mkdirs();
 		}
 
@@ -68,6 +71,7 @@ public class CollageActivity extends Activity implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bselectPhotos:
+			startActivity(photoSelection);
 			break;
 
 		case R.id.buploadPictures:
