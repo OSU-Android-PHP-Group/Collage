@@ -18,6 +18,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -37,8 +38,8 @@ public class ImportPhotos extends Activity implements OnClickListener {
 	Bitmap userPhoto;
 	ImageView mImageView;
 	TextView title;
-
-	@Override
+	
+  @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.photoview);
@@ -62,19 +63,17 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		title.setVisibility(View.GONE);
 	}
 
-	public void savePhotoToSD(Bitmap photo) throws IOException {
+	/*
+	 * This function takes what ever photo and path you give it, and saves it
+	 * there.
+	 */
+	public void savePhotoToSD(Bitmap photo, String name, String savedPhotoDir)
+			throws IOException {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
-		// you can create a new file name "test.jpg" in sdcard folder.
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-				.format(new Date());
-		File f = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
-				+ "/Collage"
-				+ File.separator
-				+ timeStamp
-				+ ".jpg");
+		File f = new File(savedPhotoDir + File.separator + name);
+
 		try {
 			f.createNewFile();
 		} catch (IOException e) {
@@ -84,6 +83,52 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		// write the bytes in file
 		FileOutputStream fo = new FileOutputStream(f);
 		fo.write(bytes.toByteArray());
+
+	}
+
+	public Bitmap shrinkPhotoToThumbnail(String photoPath) {
+		Log.d("Thumbnail", "I'm in the function!");
+		Bitmap thumbNailImage = null;
+		int targetWidth = 200;
+		int targetHeight = 200;
+
+		// create bitmap options to calculate and use sample size
+		Log.d("Thumbnail", "The BitMap Factory options are not set.");
+		BitmapFactory.Options bmpOptions = new BitmapFactory.Options();
+		Log.d("Thumbnail", "The BitMap Factory options are set.");
+
+		// first decode image dimensions only - not the image bitmap itself
+		bmpOptions.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(photoPath, bmpOptions);
+
+		// image width and height before sampling
+		int currHeight = bmpOptions.outHeight;
+		int currWidth = bmpOptions.outWidth;
+
+		int sampleSize = 1;
+		
+    // calculate the sample size if the existing size is larger than target
+		// size
+		if (currHeight > targetHeight || currWidth > targetWidth) {
+			// use either width or height
+			if (currWidth > currHeight)
+				sampleSize = Math.round((float) currHeight
+						/ (float) targetHeight);
+			else
+				sampleSize = Math
+						.round((float) currWidth / (float) targetWidth);
+		}
+
+		// use the new sample size
+		bmpOptions.inSampleSize = sampleSize;
+
+		// now decode the bitmap using sample options
+		bmpOptions.inJustDecodeBounds = false;
+
+		// get the file as a bitmap
+		thumbNailImage = BitmapFactory.decodeFile(photoPath, bmpOptions);
+
+		return thumbNailImage;
 	}
 
 	public void choosePhotoOption() {
@@ -136,20 +181,48 @@ public class ImportPhotos extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
+		// Made the default path
+		String basicPhotoPath = Environment.getExternalStorageDirectory()
+				.getAbsolutePath() + "/Collage";
+
+		// make the picture name so that the tumbnail and the original are the
+		// same
+		String photoName = new SimpleDateFormat("yyyyMMdd_HHmmss")
+				.format(new Date()) + ".jpg";
+
 		if (resultCode == RESULT_OK) {
 
 			switch (requestCode) {
 			case PICK_FROM_CAMERA:
+
+				// Display and save the original photo
 				userPhoto = (Bitmap) data.getExtras().get("data");
 				mImageView.setImageBitmap(userPhoto);
 
-				// Try and save the picture to the sd card
 				try {
-					savePhotoToSD(userPhoto);
+					savePhotoToSD(userPhoto, photoName, basicPhotoPath);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
+
+				// Shrink the given picture and save it to the thumbnail
+				// directory
+				Log.d("ThumbNail", "I've reached the new bitmap!");
+				Bitmap thumbNailImage;
+				thumbNailImage = shrinkPhotoToThumbnail(basicPhotoPath);
+
+				Log.d("ThumbNail",
+						"Our thumbnail is: " + thumbNailImage.toString());
+
+				try {
+					savePhotoToSD(thumbNailImage, photoName, basicPhotoPath
+							+ "/thumbnails");
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 				showView(isViewHidden);
 				break;
 
@@ -169,12 +242,12 @@ public class ImportPhotos extends Activity implements OnClickListener {
 				}
 
 				try {
-					savePhotoToSD(userPhoto);
+					savePhotoToSD(userPhoto, photoName, basicPhotoPath);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				showView(isViewHidden);
 				break;
 			}
