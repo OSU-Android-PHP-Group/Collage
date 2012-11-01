@@ -14,13 +14,15 @@ public class SelectCollagePhotos extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery);
 
+		String filesSelected[] = null;
+
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(new ImageAdapter(this));
 
 		gridview.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-				Toast.makeText(SelectCollagePhotos.this, "" + position,
+				Toast.makeText(SelectCollagePhotos.this, "" + "File has been chosen",
 						Toast.LENGTH_SHORT).show();
 			}
 		});
