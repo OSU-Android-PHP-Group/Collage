@@ -53,12 +53,10 @@ public class CollageActivity extends Activity implements OnClickListener {
 
 		File sdcard = Environment.getExternalStorageDirectory();
 		File collageDir = new File( sdcard.getAbsolutePath() + "/Collage");
-		File thumbnailsDir = new File(sdcard.getAbsolutePath() + "/Collage/thumbnails");
 		
 		if (!collageDir.isDirectory()) {
 			// Make the two folders on the sd card since they don't exist
 			collageDir.mkdirs();
-			thumbnailsDir.mkdirs();
 		}
 
 	}
