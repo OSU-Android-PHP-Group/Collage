@@ -15,6 +15,18 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
 
+	private static String collageDirectory;
+	private static String[] allFiles;
+
+	static {
+		ImageAdapter.collageDirectory = Environment.getExternalStorageDirectory()
+			.getAbsolutePath() + "/Collage/";
+
+		// Add that folder to the image adapter then add give the array all of the
+		// files in folder
+		ImageAdapter.allFiles = new File(collageDirectory).list();
+	}
+
 	private Context mContext;
 	int mGalleryItemBackground;
 
@@ -48,19 +60,16 @@ public class ImageAdapter extends BaseAdapter {
 			myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
 
-		Bitmap bitmapImage = BitmapFactory.decodeFile(folder + "/"
-				+ allFiles[position]);
+		Bitmap bitmapImage = BitmapFactory.decodeFile(
+				new File(collageDirectory, allFiles[position]).getPath());
+
 		BitmapDrawable drawableImage = new BitmapDrawable(bitmapImage);
 		myImageView.setImageDrawable(drawableImage);
 
 		return myImageView;
 	}
 
-	String collageFolder = Environment.getExternalStorageDirectory()
-			.getAbsolutePath() + "/Collage/";
-
-	// Add that folder to the image adapter then add give the array all of the
-	// files in folder
-	File folder = new File(collageFolder);
-	String[] allFiles = folder.list();
+	public static String getCollageDirectory() {
+		return ImageAdapter.collageDirectory;
+	}
 }
