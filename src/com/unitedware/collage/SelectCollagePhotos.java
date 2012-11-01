@@ -14,8 +14,6 @@ public class SelectCollagePhotos extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.gallery);
 
-		String filesSelected[] = null;
-
 		GridView gridview = (GridView) findViewById(R.id.gridview);
 		gridview.setAdapter(new ImageAdapter(this));
 
