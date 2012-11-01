@@ -97,6 +97,7 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		// write the bytes in file
 		FileOutputStream fo1 = new FileOutputStream(f1);
 		fo1.write(bytes.toByteArray());
+		fo1.close();
 
 	}
 
