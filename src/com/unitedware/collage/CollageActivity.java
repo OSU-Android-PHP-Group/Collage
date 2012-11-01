@@ -41,7 +41,7 @@ public class CollageActivity extends Activity implements OnClickListener {
 		uploadPictures.setOnClickListener(this);
 
 		aboutUs = new Intent("com.unitedware.collage.ABOUT");
-		photoSelection = new Intent("com.unitedware.collage.CHOOSEPHOTO");
+		photoSelection = new Intent("com.unitedware.collage.SELECTCOLLAGEPHOTOS");
 		startPhotoUpload = new Intent("com.unitedware.collage.IMPORTPHOTOS");
 		
 		// Make sure all the directories are in order
@@ -68,6 +68,7 @@ public class CollageActivity extends Activity implements OnClickListener {
 
 		switch (v.getId()) {
 		case R.id.bselectPhotos:
+			startActivity(photoSelection);
 			break;
 
 		case R.id.buploadPictures:
