@@ -53,6 +53,10 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		}
 	}
 
+	/**
+	 * Gives all of the UI elements their ids and allows them to have the
+	 * onClickListener abilities
+	 */
 	public void initialize() {
 		mImageView = (ImageView) findViewById(R.id.ivPhoto);
 		selectAnother = (Button) findViewById(R.id.bChoosePhoto);
@@ -62,30 +66,44 @@ public class ImportPhotos extends Activity implements OnClickListener {
 		title.setVisibility(View.GONE);
 	}
 
+	/**
+	 * Saves the photo taken or grabbed from gallery to be saved to the SD card
+	 * in the Collage Thumbnail dir
+	 * 
+	 * @param photo
+	 * @throws IOException
+	 */
 	public void savePhotoToSD(Bitmap photo) throws IOException {
 		ByteArrayOutputStream bytes = new ByteArrayOutputStream();
 		photo.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
 
-		// you can create a new file name "test.jpg" in sdcard folder.
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
 				.format(new Date());
-		File f = new File(Environment.getExternalStorageDirectory()
-				.getAbsolutePath()
+
+		String originalPhotoNameAndPath = Environment
+				.getExternalStorageDirectory().getAbsolutePath()
 				+ "/Collage"
-				+ File.separator
-				+ timeStamp
-				+ ".jpg");
+				+ File.separator + timeStamp + ".jpg";
+
+		// Make the original Bitmap into the file
+		File f1 = new File(originalPhotoNameAndPath);
+
 		try {
-			f.createNewFile();
+			f1.createNewFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		// write the bytes in file
-		FileOutputStream fo = new FileOutputStream(f);
-		fo.write(bytes.toByteArray());
+		FileOutputStream fo1 = new FileOutputStream(f1);
+		fo1.write(bytes.toByteArray());
+
 	}
 
+	/**
+	 * Allows the user to choose which method to extract the photo from. ie
+	 * Camera, Gallery, Astro File Manager etc.
+	 */
 	public void choosePhotoOption() {
 
 		final String[] items = new String[] { "Take from camera",
@@ -121,6 +139,13 @@ public class ImportPhotos extends Activity implements OnClickListener {
 
 	}
 
+	/**
+	 * Makes the back view visible so that the user can view the photo they just
+	 * selected.
+	 * 
+	 * @param isHidden
+	 * @return
+	 */
 	public boolean showView(boolean isHidden) {
 
 		// Reveals layout if necessary
@@ -174,7 +199,7 @@ public class ImportPhotos extends Activity implements OnClickListener {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
 				showView(isViewHidden);
 				break;
 			}
