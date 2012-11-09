@@ -3,6 +3,7 @@ package com.unitedware.collage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.http.HttpEntity;
@@ -19,43 +20,82 @@ import org.apache.http.params.CoreProtocolPNames;
 import android.util.Log;
 
 public class ServerClient {
-	private static String collageServerURI = "http://collage.united-ware.com/api/image";
-	private static String TAG = "POST_COLLAGE";
+	private static final String COLLAGE_SERVER_URL = "http://collage.united-ware.com/api/image";
+	private static final String TAG = "POST_COLLAGE";
 
 	private ServerClient() {
 	}
 
-	public static InputStream postCollage(Collage coll) {
-		HttpClient client = new DefaultHttpClient();
-		client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-				HttpVersion.HTTP_1_1);
-
-		HttpPost post = new HttpPost(ServerClient.collageServerURI);
+	/**
+	 * Construct an HTTP POST request containing images of the given collage.
+	 *
+	 * @param coll
+	 *            Local representation of the collage to be generated.
+	 * @return The multipart post containing images to be turned into a collage.
+	 */
+	private static HttpPost constructPost(Collage coll) {
+		// Construct the POST request
+		HttpPost post = new HttpPost(ServerClient.COLLAGE_SERVER_URL);
 		MultipartEntity entity = new MultipartEntity(
 				HttpMultipartMode.BROWSER_COMPATIBLE);
-		for (File img : coll.getImages()) {
-			entity.addPart("images[]", new FileBody(img,
-					"application/octet-stream"));
-		}
 
+		for (File img : coll.getImages()) {
+			String contentType = URLConnection.guessContentTypeFromName(img
+					.getName());
+			entity.addPart("images[]", new FileBody(img, contentType));
+		}
 		post.setEntity(entity);
+		return post;
+	}
+
+	/**
+	 * Execute the given post and handle the response nicely.
+	 *
+	 * @param post
+	 *            A POST request containing several images to turn into a
+	 *            collage.
+	 * @return The content of the server's response (an image) if successful
+	 *         else null.
+	 */
+	private static InputStream execute(HttpPost post) {
+		// Create an HttpClient
+		HttpClient http = new DefaultHttpClient();
+		http.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+				HttpVersion.HTTP_1_1);
+
+		// Create the return value
 		InputStream result = null;
 		try {
-			client.execute(post);
-			HttpResponse response = client.execute(post);
+			HttpResponse response = http.execute(post);
 			HttpEntity respEntity = response.getEntity();
 			int statusCode = response.getStatusLine().getStatusCode();
 
 			if (statusCode == 200) {
+				// A successful request means overrides result with the
+				// response's content.
 				result = respEntity.getContent();
 			} else {
 				ServerClient.handleError(respEntity);
-				result =  null;
+				result = null;
 			}
 		} catch (IOException ioe) {
-			Log.e(ServerClient.TAG, "Error with request/response: " + ioe.getMessage());
+			Log.e(ServerClient.TAG,
+					"Error with request/response: " + ioe.getMessage());
 		}
 		return result;
+	}
+
+	/**
+	 * Construct an HTTP POST request containing images of the given collage.
+	 *
+	 * @param coll
+	 *            Local representation of the collage to be generated.
+	 * @return The content of the server's response (an image) if successful
+	 *         else null.
+	 */
+	public static InputStream postCollage(Collage coll) {
+		HttpPost post = ServerClient.constructPost(coll);
+		return ServerClient.execute(post);
 	}
 
 	/**
