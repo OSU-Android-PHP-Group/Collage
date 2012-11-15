@@ -16,15 +16,11 @@ import android.widget.ImageView;
 public class ImageAdapter extends BaseAdapter {
 
 	private static String collageDirectory;
-	private static String[] allFiles;
+	private String[] allFiles;
 
 	static {
 		ImageAdapter.collageDirectory = Environment.getExternalStorageDirectory()
 			.getAbsolutePath() + "/Collage/";
-
-		// Add that folder to the image adapter then add give the array all of the
-		// files in folder
-		ImageAdapter.allFiles = new File(collageDirectory).list();
 	}
 
 	private Context mContext;
@@ -32,24 +28,17 @@ public class ImageAdapter extends BaseAdapter {
 
 	public ImageAdapter(Context c) {
 		mContext = c;
+		this.allFiles = new File(collageDirectory).list();
 	}
 
 	public int getCount() {
 		return allFiles.length;
 	}
 
-	public Object getItem(int position) {
-		return null;
-	}
-
-	public long getItemId(int position) {
-		return 0;
-	}
-
 	// create a new ImageView for each item referenced by the Adapter
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView myImageView = new ImageView(mContext);
-
+ 
 		// if there is already a view don't recreate it
 		if (convertView != null) {
 			myImageView = (ImageView) convertView;
@@ -71,5 +60,20 @@ public class ImageAdapter extends BaseAdapter {
 
 	public static String getCollageDirectory() {
 		return ImageAdapter.collageDirectory;
+	}
+
+	@Override
+	public Object getItem(int position) {
+		if (position < this.allFiles.length) {
+			return new File(collageDirectory, this.allFiles[position]);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }
