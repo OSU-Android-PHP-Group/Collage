@@ -96,8 +96,7 @@ public class Collage {
 	 */
 	public File generate() throws FileNotFoundException, EmptyCollageException,
 			IOException {
-		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss")
-				.format(new Date());
+		String timeStamp = SimpleDateFormat.getDateTimeInstance().format(new Date());
 		return this.generate(timeStamp + ".jpg");
 	}
 }
