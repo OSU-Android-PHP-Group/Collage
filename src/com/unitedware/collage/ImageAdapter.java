@@ -15,29 +15,30 @@ import android.widget.ImageView;
 
 public class ImageAdapter extends BaseAdapter {
 
+	private static String collageDirectory;
+	private String[] allFiles;
+
+	static {
+		ImageAdapter.collageDirectory = Environment.getExternalStorageDirectory()
+			.getAbsolutePath() + "/Collage/";
+	}
+
 	private Context mContext;
 	int mGalleryItemBackground;
 
 	public ImageAdapter(Context c) {
 		mContext = c;
+		this.allFiles = new File(collageDirectory).list();
 	}
 
 	public int getCount() {
 		return allFiles.length;
 	}
 
-	public Object getItem(int position) {
-		return null;
-	}
-
-	public long getItemId(int position) {
-		return 0;
-	}
-
 	// create a new ImageView for each item referenced by the Adapter
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ImageView myImageView = new ImageView(mContext);
-
+ 
 		// if there is already a view don't recreate it
 		if (convertView != null) {
 			myImageView = (ImageView) convertView;
@@ -48,19 +49,31 @@ public class ImageAdapter extends BaseAdapter {
 			myImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 		}
 
-		Bitmap bitmapImage = BitmapFactory.decodeFile(folder + "/"
-				+ allFiles[position]);
+		Bitmap bitmapImage = BitmapFactory.decodeFile(
+				new File(collageDirectory, allFiles[position]).getPath());
+
 		BitmapDrawable drawableImage = new BitmapDrawable(bitmapImage);
 		myImageView.setImageDrawable(drawableImage);
 
 		return myImageView;
 	}
 
-	String collageFolder = Environment.getExternalStorageDirectory()
-			.getAbsolutePath() + "/Collage/";
+	public static String getCollageDirectory() {
+		return ImageAdapter.collageDirectory;
+	}
 
-	// Add that folder to the image adapter then add give the array all of the
-	// files in folder
-	File folder = new File(collageFolder);
-	String[] allFiles = folder.list();
+	@Override
+	public Object getItem(int position) {
+		if (position < this.allFiles.length) {
+			return new File(collageDirectory, this.allFiles[position]);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public long getItemId(int position) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
